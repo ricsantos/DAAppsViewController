@@ -33,6 +33,7 @@ static NSNumberFormatter *_decimalNumberFormatter = nil;
 
 @interface DAAppViewCell ()
 
+@property (nonatomic, strong) UIImageView *cellImageShadowView;
 @property (nonatomic, strong) UIImageView *iconView;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *genreLabel;
@@ -108,16 +109,16 @@ static NSNumberFormatter *_decimalNumberFormatter = nil;
         }
         [self addSubview:cellTopWhiteLine];
         
-        UIImageView *cellImageShadowView = [[UIImageView alloc] init];
-        cellImageShadowView.frame = (CGRect) {
+        _cellImageShadowView = [[UIImageView alloc] init];
+        _cellImageShadowView.frame = (CGRect) {
             .origin.x = 11.0f,
             .origin.y = 8.0f,
             .size.width = 66.0f,
             .size.height = 67.0f
         };
-        cellImageShadowView.contentMode = UIViewContentModeScaleAspectFit;
-        cellImageShadowView.image = [UIImage imageNamedFromMainBundleOrFramework:@"DAAppsViewController.bundle/DAShadowImage"];
-        [self addSubview:cellImageShadowView];
+        _cellImageShadowView.contentMode = UIViewContentModeScaleAspectFit;
+        _cellImageShadowView.image = [UIImage imageNamedFromMainBundleOrFramework:@"DAAppsViewController.bundle/DAShadowImage"];
+        [self addSubview:_cellImageShadowView];
         
         _iconView = [[UIImageView alloc] init];
         _iconView.frame = (CGRect) {
@@ -264,12 +265,30 @@ static NSNumberFormatter *_decimalNumberFormatter = nil;
 {
     [super layoutSubviews];
     
+    CGFloat iconX = self.safeAreaInsets.left + 12.0;
+    
+    self.iconView.frame = (CGRect) {
+        .origin.x = iconX,
+        .origin.y = 9.0f,
+        .size.width = 64.0f,
+        .size.height = 64.0f
+    };
+    
+    _cellImageShadowView.frame = (CGRect) {
+        .origin.x = iconX - 1,
+        .origin.y = 8.0f,
+        .size.width = 66.0f,
+        .size.height = 67.0f
+    };
+    
     CGFloat maxNameLabelWidth = self.bounds.size.width - 165.0f;
     CGSize nameLabelSize = [self.nameLabel sizeThatFits:(CGSize) {
         .width = maxNameLabelWidth
     }];
+    
+    CGFloat leadingX = self.iconView.frame.origin.x + self.iconView.frame.size.width + 12;
     self.nameLabel.frame = (CGRect) {
-        .origin.x = 88.0f,
+        .origin.x = leadingX,
         .origin.y = 20.0f,
         .size.width = MIN(nameLabelSize.width, maxNameLabelWidth),
         .size.height = nameLabelSize.height
@@ -277,14 +296,21 @@ static NSNumberFormatter *_decimalNumberFormatter = nil;
     
     CGSize genreLabelSize = [self.genreLabel sizeThatFits:self.genreLabel.bounds.size];
     self.genreLabel.frame = (CGRect) {
-        .origin.x = 88.0f,
+        .origin.x = leadingX,
         .origin.y = 38.0f,
         .size = genreLabelSize
     };
     
+    self.starImageView.frame = (CGRect) {
+        .origin.x = leadingX,
+        .origin.y = 54.0f,
+        .size.width = 44.0f,
+        .size.height = 9.5f
+    };
+    
     CGSize ratingsLabelSize = [self.ratingsLabel sizeThatFits:self.ratingsLabel.bounds.size];
     self.ratingsLabel.frame = (CGRect) {
-        .origin.x = 135.0f,
+        .origin.x = leadingX + 47.0,
         .origin.y = 52.0f,
         .size = ratingsLabelSize
     };
