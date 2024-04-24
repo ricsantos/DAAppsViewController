@@ -28,6 +28,9 @@
         _isUniversal = [features containsObject:@"iosUniversal"];
         _minimumOsVersion = [result objectForKey:@"minimumOsVersion"];
         _formattedPrice = [[result objectForKey:@"formattedPrice"] uppercaseString];
+        if ([_formattedPrice isEqualToString:@"FREE"]) {
+            _formattedPrice = @"Get";
+        }
         NSString *artworkUrl100 = [result objectForKey:@"artworkUrl100"];
         NSString *artworkUrl512 = [result objectForKey:@"artworkUrl512"];
         NSString *iconUrlString = (artworkUrl512.length ? artworkUrl512 : artworkUrl100);
